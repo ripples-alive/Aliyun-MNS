@@ -1,0 +1,20 @@
+{
+    "name": "ripples/aliyun-mns",
+    "description": "Unofficial SDK for Aliyun MNS(MQS).",
+    "type": "library",
+    "license": "GPL",
+    "keywords": ["aliyun", "mns", "mqs"],
+    "homepage": "https://github.com/JayvicWen/Aliyun-MNS",
+    "authors": [
+        {
+            "name": "Ripples",
+            "email": "w@q2zy.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ripples\\Aliyun\\": "src/"
+        }
+    }
+}
