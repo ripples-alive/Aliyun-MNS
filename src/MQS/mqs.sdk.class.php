@@ -13,7 +13,7 @@ Class mqs{
     private static $accessKeyId      = null;
     private static $accessKeySecret  = null;
     private static $accessOwnerId    = null;
-    public static $accessQueue      = null;
+    private static $accessQueue      = null;
     private static $mqsVersion       = "2014-07-08";
     private static $retryTime        = 5;       // 若操作失败, 重试次数
     private static $sleepSecond      = 5;       // 若操作失败, 休眠5秒后重试
@@ -124,7 +124,7 @@ Class mqs{
         return "MQS " . self::$accessKeyId . ":" . $sig;
     }
 
-    public static function sendMessage( $data ){
+    public static function sendMessage( $data, $queue = null ){
         /*
         $data = array(
             'MessageBody' => '123',
@@ -140,7 +140,7 @@ Class mqs{
         $CanonicalizedMQSHeaders = array(
             'x-mqs-version' => self::_getVersion()
         );
-        $RequestResource = "/" . self::$accessQueue . "/messages";
+        $RequestResource = "/" . ($queue ?: self::$accessQueue) . "/messages";
         $sign = self::_getSignature( $VERB, $CONTENT_MD5, $CONTENT_TYPE, $GMT_DATE, $CanonicalizedMQSHeaders, $RequestResource );
         $headers = array(
             'Host' => self::_getAccessHost(),
@@ -167,7 +167,7 @@ Class mqs{
         return $res;
     }
 
-    public static function receiveMessage( $data = null ){
+    public static function receiveMessage( $data = null, $queue = null ){
         /*
          $data = array();
          */
@@ -180,7 +180,7 @@ Class mqs{
         $CanonicalizedMQSHeaders = array(
             'x-mqs-version' => self::_getVersion()
         );
-        $RequestResource = "/" . self::$accessQueue . "/messages";
+        $RequestResource = "/" . ($queue ?: self::$accessQueue) . "/messages";
         $sign = self::_getSignature( $VERB, $CONTENT_MD5, $CONTENT_TYPE, $GMT_DATE, $CanonicalizedMQSHeaders, $RequestResource );
         $headers = array(
             'Host' => self::_getAccessHost(),
@@ -197,7 +197,7 @@ Class mqs{
         return self::_requestCore( $request_uri, $VERB, $headers, $CONTENT_BODY );
     }
 
-    public static function dropMessage( $data ){
+    public static function dropMessage( $data, $queue = null ){
         /*
         $data = array(
            'ReceiptHandle' => '1-ODU4OTkzNDU5My0xNDA1ODQ4OTUwLTItOA=='
@@ -211,7 +211,7 @@ Class mqs{
         $CanonicalizedMQSHeaders = array(
             'x-mqs-version' => self::_getVersion()
         );
-        $RequestResource = "/" . self::$accessQueue . "/messages?" . http_build_query( $data );
+        $RequestResource = "/" . ($queue ?: self::$accessQueue) . "/messages?" . http_build_query( $data );
         $sign = self::_getSignature( $VERB, $CONTENT_MD5, $CONTENT_TYPE, $GMT_DATE, $CanonicalizedMQSHeaders, $RequestResource );
         $headers = array(
             'Host' => self::_getAccessHost(),
