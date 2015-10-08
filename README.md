@@ -39,4 +39,4 @@ $client->dropMessage([
 ```
 
 ## LICENSE
-GPL
+[MIT](./LICENSE)
